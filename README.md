@@ -81,3 +81,12 @@ A dataset of all events on the calendars of all our users.
   key parts of your code.
 - You'll notice that all our events start and end on 15 minute blocks. However, this is not a strict
   requirement. Events may start or end on any minute (for example, you may have an event from 13:26 - 13:54).
+
+
+## My Instructions
+
+- I have created 3 files. 
+1. meeting.rb - this file is the file that triggers the script run. This file can be run by enterring `ruby ./meeting.rb <names of users>`
+For example `ruby ./meeting.rb Bob Maggie` would give you a list of days/times when Bob and Maggie are available
+2. availability.rb - this files is the main file that the script runs. This does 3 steps; firstly takes the list of inputted users, and looks them up in the users.json file for matching users. Given they match an existing user (it warns if a user inputted is not in the file) it generates a hash of the user to a user id. Secondly, it looks at the events.json file and further generates a hash, by the hour and minute of day of availability, by looking at the schedule and "blocking" out those times. Finally, it outputs the remaining times in the hash that are deemed available on the users inputted and matches the matching times.
+3. availability_spec.rb - this file is the set of tests I wrote for the Availability class, from a TDD perspective. 
