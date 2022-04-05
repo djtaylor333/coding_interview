@@ -7,10 +7,11 @@ describe 'Availability' do
     describe 'check_availability' do
         context 'finding available schedules' do
             it 'logs info about script run' do
+                allow(Availability).to receive(:flatten_free_times).and_return("TIMES")
                 expect(STDOUT).to receive(:puts).with("Finding Open Schedules for the following participants:")
                 expect(STDOUT).to receive(:puts).with(users.join(', '))
                 expect(STDOUT).to receive(:puts).with(("This is when John, Maggie is/are available:"))
-                expect(STDOUT).to receive(:puts)
+                expect(STDOUT).to receive(:puts).with("TIMES")
                 subject
             end
 
