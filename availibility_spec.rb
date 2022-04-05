@@ -9,6 +9,8 @@ describe 'Availability' do
             it 'logs info about script run' do
                 expect(STDOUT).to receive(:puts).with("Finding Open Schedules for the following participants:")
                 expect(STDOUT).to receive(:puts).with(users.join(', '))
+                expect(STDOUT).to receive(:puts).with(("This is when John, Maggie is/are available:"))
+                expect(STDOUT).to receive(:puts)
                 subject
             end
 
@@ -48,7 +50,7 @@ describe 'Availability' do
     end
 
     describe 'load_schedules' do
-        let(:users) { [{"id"=>2, "name"=>"John"}] }
+        let(:users) { [{"id"=>2, "name"=>"Bob"}] }
 
         subject{ Availability.load_schedules(users) }
 
@@ -63,13 +65,30 @@ describe 'Availability' do
         end
 
         it 'updates the users array of hashes with the times from the events' do
-            expect(subject).to eq( [{"id"=>2, "name"=>"John", "schedule"=>{}}] )
+            scheduled = [[DateTime.parse("2021-07-05T13:30:00+00:00"), DateTime.parse("2021-07-05T15:00:00+00:00")],
+                [DateTime.parse("2021-07-06T14:00:00+00:00"), DateTime.parse("2021-07-06T14:30:00+00:00")],
+                [DateTime.parse("2021-07-07T14:00:00+00:00"),DateTime.parse("2021-07-07T14:30:00+00:00")]]
+            expect(subject).to eq( [{"id"=>2, "name"=>"Bob", "schedule"=>scheduled}] )
         end
     end
 
     describe 'output_free_times' do
+        let(:schedules) { [{"id"=>2, "name"=>"John", "schedule"=>[]}] }
+
+        subject { Availability.output_free_times(schedules) }
         it 'outputs the available times for the users' do
-            subject
+
+
+            expect(subject.count).to eq(4323) #every minute of everyday for 3 days
+        end
+    end
+
+    describe 'flatten_free_times' do
+        let(:times) { [DateTime.parse("2021-07-07 00:00"), DateTime.parse("2021-07-07 00:01"), DateTime.parse("2021-07-07 00:02"), DateTime.parse("2021-07-07 00:03")]  }
+        subject { Availability.flatten_free_times(times) }
+       
+        it "flattens the array of times" do
+            expect(subject).to eq(["2021-07-07 00:00 ---- 00:03"])
         end
     end
 end
