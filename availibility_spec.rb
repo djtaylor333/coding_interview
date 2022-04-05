@@ -88,7 +88,7 @@ describe 'Availability' do
         subject { Availability.flatten_free_times(times) }
        
         it "flattens the array of times" do
-            expect(subject).to eq(["2021-07-07 00:00 ---- 00:03"])
+            expect(subject).to eq(["2021-07-07 00:00 ---- 00:04"])
         end
     end
 end

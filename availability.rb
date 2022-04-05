@@ -96,7 +96,13 @@ class Availability
             elsif free_times[i].minute == 59 && free_times[i+1]&.minute == 0 && free_times[i].hour + 1 == free_times[i+1]&.hour
                 next
             else
-                flattened_times << "#{format("%04d", first_time.year)}-#{format("%02d", first_time.month)}-#{format("%02d", first_time.day)} #{format("%02d", first_time.hour)}:#{format("%02d", first_time.minute)} ---- #{format("%02d", time.hour)}:#{format("%02d", time.minute)}"
+                correct_time = "#{format("%04d", first_time.year)}-#{format("%02d", first_time.month)}-#{format("%02d", first_time.day)} #{format("%02d", first_time.hour)}:#{format("%02d", first_time.minute - 1)}"
+                beginning_of_day = "#{format("%04d", first_time.year)}-#{format("%02d", first_time.month)}-#{format("%02d", first_time.day)} #{format("%02d", first_time.hour)}:#{format("%02d", first_time.minute)}"
+                string_time_start = first_time.minute == 0 ? beginning_of_day : correct_time
+                hour = time.minute == 59 ? time.hour + 1 : time.hour
+                minute = time.minute == 59 ? 0 : time.minute + 1 
+                string_time_end = "#{format("%02d", hour)}:#{format("%02d", minute)}"
+                flattened_times << "#{string_time_start} ---- #{string_time_end}"
                 first_time = free_times[i+1]
                 next
             end
